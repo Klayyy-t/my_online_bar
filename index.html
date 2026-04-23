@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCZ的数字酒馆</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <div id="welcome-screen" class="container">
+        <header>
+            <h1 class="neon-text">TCZ's Relaxing Bar</h1>
+            <div id="digital-clock">00:00:00</div>
+            <p id="live-status">正在积攒能量...</p>
+        </header>
+
+        <div class="energy-zone">
+            <div id="click-counter">0</div>
+            <button id="energy-btn" onclick="chargeEnergy()">别思考，点击激发能量！⚡</button>
+        </div>
+
+        <div class="mode-selector">
+            <button class="btn-rain" onclick="enterMode('archive')">听雨 · 个人档案 🌧️</button>
+            <button class="btn-fire" onclick="enterMode('interaction')">篝火 · 好友互动 🔥</button>
+        </div>
+    </div>
+
+    <div id="archive-page" class="mode-page" style="display: none;">
+        <button class="back-btn" onclick="goHome()">← 退出档案</button>
+        <div class="content-wrapper">
+            <h2>📜 人生档案馆</h2>
+            <div class="archive-grid">
+                <div class="card">
+                    <h3>档案编号：20040215</h3>
+                    <p><strong>星座：</strong>水瓶座♒</p>
+                    <p><strong>MBTI：</strong>INFJ</p>
+                    <p><strong>座右铭：</strong>努力是梭哈的艺术。</p>
+                    <p><strong>技能：</strong>体育生 夜猫子 酒蒙子 药罐子</p>
+                </div>
+                <div class="card">
+                    <h3>科研日常</h3>
+                    <p>当前课题：木材介电击穿模型研究</p>
+                    <div class="formula">$$ \nabla \cdot (\varepsilon \nabla \phi) = 0 $$</div>
+                </div>
+                <div class="card full-width">
+                    <h3>我的故事</h3>
+                    <p>这是一个小镇做题家从小县城到魔都的22年成长史，你愿意用一杯酒换一个漫长故事吗？</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="interaction-page" class="mode-page" style="display: none;">
+        <button class="back-btn" onclick="goHome()">← 离开篝火</button>
+        <div class="content-wrapper">
+            <h2>🔥 篝火互动区</h2>
+            <div class="interaction-grid">
+                <div class="box">
+                    <h4>✉️ 匿名真心话盒子</h4>
+                    <textarea id="anon-input" placeholder="提问、吐槽、悄悄话..."></textarea>
+                    <button class="mini-btn" onclick="sendAnon()">投递</button>
+                </div>
+                <div class="box">
+                    <h4>🏷️ 朋友印象墙</h4>
+                    <div id="labels">
+                        <span class="tag">i人</span>
+                        <span class="tag">某某某</span>
+                        <span class="tag">老实人</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="tag-input" placeholder="输入印象..." onkeypress="addTag(event)">
+                        <button class="mini-btn" onclick="submitTag()">贴上</button>
+                    </div>
+                </div>
+                <div class="box">
+                    <h4>👣 访客足迹</h4>
+                    <p id="visit-log">你是第 1 位来到这里的火伴</p>
+                    <button class="mini-btn" onclick="getMission()">领取小任务</button>
+                </div>
+                <div class="box">
+                    <h4>🎁 最想让阿臻干什么？</h4>
+                    <div id="mission-list">
+                        <div class="mission-item">✨ 这里的任务由你来定义...</div>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="mission-input" placeholder="输入你想让我做的事...">
+                        <button class="mini-btn" onclick="postMission()">派发任务</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
