@@ -175,17 +175,36 @@ async function sendAnon() {
     }
 }
 
+// 全网同步版：访客足迹
 async function updateVisitLog() {
-    // 1. 获取当前数据库里的总数
-    let { data } = await _supabase.from('stats').select('visit_count').eq('id', 1).single();
-    let newCount = (data ? data.visit_count : 0) + 1;
+    try {
+        // 1. 先获取当前云端的访客数 (锁定 ID 为 1 的那行)
+        let { data, error } = await _supabase
+            .from('stats')
+            .select('visit_count')
+            .eq('id', 1)
+            .single();
 
-    // 2. 更新数据库
-    await _supabase.from('stats').update({ visit_count: newCount }).eq('id', 1);
+        if (error) throw error;
 
-    // 3. 显示在网页上
-    const log = document.getElementById('visit-log');
-    if(log) log.innerText = `你是第 ${newCount} 位踏入档案馆的火伴`;
+        // 2. 计算新的数字并更新回云端
+        const newCount = (data ? data.visit_count : 0) + 1;
+        await _supabase
+            .from('stats')
+            .update({ visit_count: newCount })
+            .eq('id', 1);
+
+        // 3. 显示在网页上
+        const log = document.getElementById('visit-log');
+        if (log) {
+            log.innerText = `你是第 ${newCount} 位踏入档案馆的火伴`;
+        }
+    } catch (err) {
+        console.error("更新足迹失败:", err);
+        // 如果云端失败，降级显示本地缓存（可选）
+        const localCount = localStorage.getItem('tcz_visits') || 1;
+        document.getElementById('visit-log').innerText = `你是第 ${localCount} 位访客`;
+    }
 }
 
 // 启动入口
