@@ -150,21 +150,28 @@ async function loadTags() {
 // ==========================================
 // 7. 辅助功能
 // ==========================================
+// 修改后的真心话投递函数
 async function sendAnon() {
     const input = document.getElementById('anon-input');
     const content = input.value.trim();
-    if (!content) return;
+    
+    if (!content) {
+        alert("空空的盒子可装不下真心话哦 📦");
+        return;
+    }
 
-    // 推送到 Supabase 的 secrets 表
+    // 将数据推送到 Supabase 的 secrets 表
     const { error } = await _supabase
         .from('secrets')
         .insert([{ content: content }]);
 
-    if (!error) {
-        alert("🔒 你的真心话已通过加密隧道送达阿臻！");
-        input.value = "";
-    } else {
+    if (error) {
         console.error("投递失败:", error);
+        alert("由于网络波动，真心话没能飞过去...");
+    } else {
+        // 成功反馈
+        alert("🔒 你的真心话已通过加密隧道送达小田！");
+        input.value = "";
     }
 }
 
