@@ -150,17 +150,35 @@ async function loadTags() {
 // ==========================================
 // 7. 辅助功能
 // ==========================================
-function sendAnon() {
-    alert("🔒 投递成功！虽然目前是模拟投递，但心意领到了。");
-    document.getElementById('anon-input').value = "";
+async function sendAnon() {
+    const input = document.getElementById('anon-input');
+    const content = input.value.trim();
+    if (!content) return;
+
+    // 推送到 Supabase 的 secrets 表
+    const { error } = await _supabase
+        .from('secrets')
+        .insert([{ content: content }]);
+
+    if (!error) {
+        alert("🔒 你的真心话已通过加密隧道送达阿臻！");
+        input.value = "";
+    } else {
+        console.error("投递失败:", error);
+    }
 }
 
-function updateVisitLog() {
-    let count = localStorage.getItem('tcz_visits') || 0;
-    count++;
-    localStorage.setItem('tcz_visits', count);
+async function updateVisitLog() {
+    // 1. 获取当前数据库里的总数
+    let { data } = await _supabase.from('stats').select('visit_count').eq('id', 1).single();
+    let newCount = (data ? data.visit_count : 0) + 1;
+
+    // 2. 更新数据库
+    await _supabase.from('stats').update({ visit_count: newCount }).eq('id', 1);
+
+    // 3. 显示在网页上
     const log = document.getElementById('visit-log');
-    if(log) log.innerText = `你是第 ${count} 位来到这里的火伴`;
+    if(log) log.innerText = `你是第 ${newCount} 位踏入档案馆的火伴`;
 }
 
 // 启动入口
