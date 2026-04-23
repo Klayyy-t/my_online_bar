@@ -1,7 +1,7 @@
 // ==========================================
 // 1. 核心配置：请在此处填入你的 Supabase 信息
 // ==========================================
-const SUPABASE_URL = 'https://byzflvstxrovbpdrqjtb.supabase.co/rest/v1/'; 
+const SUPABASE_URL = 'https://byzflvstxrovbpdrqjtb.supabase.co'; 
 const SUPABASE_KEY = 'sb_publishable_Tj-w8Y8v2JFSsJqVS4uw9g_EYOeQXNM';
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
